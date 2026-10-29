@@ -2,7 +2,8 @@
 
 | Файл | Содержание |
 |---|---|
-| [final_report.md](final_report.md) | итоговое заключение (начинать отсюда) |
+| [conclusion.md](conclusion.md) | экспертное заключение (черновик, 2 стр. — для владельца риска) |
+| [final_report.md](final_report.md) | полный итоговый отчёт |
 | [audit_scope.md](audit_scope.md) | версия, архитектура, границы, ограничения методики |
 | [architecture.md](architecture.md) | компоненты, каналы, доверительные границы, Entry Point → Enforcement |
 | [requirements_matrix.md](requirements_matrix.md) | RTM: 76 атомарных критериев 2.1–5.6 |
