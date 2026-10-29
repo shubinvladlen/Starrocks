@@ -1,0 +1,115 @@
+### [root] SHOW GRANTS FOR ROLE dba_nodata
+UserIdentity	Catalog	Grants
+dba_nodata	default_catalog	GRANT DROP, ALTER ON ALL TABLES IN ALL DATABASES TO ROLE 'dba_nodata'
+dba_nodata	default_catalog	GRANT CREATE TABLE, DROP, ALTER, CREATE VIEW, CREATE MATERIALIZED VIEW ON ALL DATABASES TO ROLE 'dba_nodata'
+
+### [t_dnd] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] EXPLAIN SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE VIEW biz.v_dnd AS SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] SELECT * FROM biz.v_dnd
+ERROR 5502 (42602) at line 1: Getting analyzing error. Detail message: Unknown table 'biz.v_dnd'.
+
+### [t_dnd] CREATE MATERIALIZED VIEW biz.mv_dnd REFRESH MANUAL AS SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE TABLE biz.ctas_dnd AS SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE TABLE biz.t_dnd_own (id INT, fio VARCHAR(64), card VARCHAR(20)) DUPLICATE KEY(id) DISTRIBUTED BY HASH(id) BUCKETS 1 PROPERTIES('replication_num'='1')
+
+### [t_dnd] INSERT INTO biz.t_dnd_own SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the INSERT privilege(s) on TABLE t_dnd_own for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] SELECT * FROM biz.t_dnd_own
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE t_dnd_own for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE TABLE biz.like_dnd LIKE biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] ALTER TABLE biz.t_dnd_own SWAP WITH clients_copy
+
+### [t_dnd] SELECT * FROM biz.clients_copy
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients_copy for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] SELECT * FROM biz.t_dnd_own
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE t_dnd_own for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] EXPORT TABLE biz.clients TO 'file:///tmp/dnd_export/'
+ERROR 1064 (HY000) at line 1: Getting analyzing error. Detail message: broker is not provided.
+
+### [t_dnd] CREATE REPOSITORY dnd_repo WITH BROKER ON LOCATION 'file:///tmp/dnd_repo' PROPERTIES()
+ERROR 1064 (HY000) at line 1: Getting syntax error at line 1, column 85. Detail message: Unexpected input ')', the most similar input is {SINGLE_QUOTED_TEXT, DOUBLE_QUOTED_TEXT}.
+
+### [t_dnd] BACKUP SNAPSHOT biz.dnd_snap TO dnd_repo ON (clients)
+ERROR 5064 (42000) at line 1: Getting analyzing error. Detail message: Repository [dnd_repo] does not exist.
+
+### [t_dnd] ANALYZE TABLE biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] SELECT * FROM _statistics_.column_statistics WHERE table_name LIKE '%clients%'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE column_statistics for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] SHOW STATS META
+Database	Table	Columns	Type	UpdateTime	Properties	Healthy	ColumnStats	TabletStatsReportTime	TableHealthyMetrics	TableUpdateTime
+biz	auto_list	ALL	FULL	2026-10-29 15:49:28	{full_once_times=1}	0%	(id,FULL),(city,FULL)	+1000000000-01-01 00:00:00	[tableRowCount=1, tableRowCountInStatistics=3, totalPartitionCount=2, unhealthyPartitionCount=2, unhealthyPartitionRowCount=0, unhealthyPartitionDataSize=0KB, updatePartitionRowCountForCalc=1, deltaRowCount=0]	2026-10-29 15:49:28
+biz	clients	ALL	FULL	2026-10-29 15:49:28	{full_once_times=2}	100%	(id,FULL),(fio,FULL),(card,FULL)	2026-10-29 15:47:52	[tableRowCount=3, tableRowCountInStatistics=3, totalPartitionCount=1, unhealthyPartitionCount=0, unhealthyPartitionRowCount=0, unhealthyPartitionDataSize=0KB, updatePartitionRowCountForCalc=1, deltaRowCount=0]	2026-10-29 15:17:53
+biz	t_dnd_own	ALL	FULL	2026-10-29 15:49:27	{full_once_times=1}	0%	(id,FULL),(fio,FULL),(card,FULL)	+1000000000-01-01 00:00:00	[tableRowCount=1, tableRowCountInStatistics=3, totalPartitionCount=1, unhealthyPartitionCount=1, unhealthyPartitionRowCount=0, unhealthyPartitionDataSize=0KB, updatePartitionRowCountForCalc=1, deltaRowCount=0]	2026-10-29 15:49:27
+
+### [t_dnd] SHOW HISTOGRAM META
+
+### [t_dnd] SELECT * FROM information_schema.column_stats_usage LIMIT 5
+
+### [t_dnd] SHOW PARTITIONS FROM biz.auto_list
+PartitionId	PartitionName	VisibleVersion	VisibleVersionTime	VisibleVersionHash	State	PartitionKey	List	DistributionKey	Buckets	ReplicationNum	StorageMedium	CooldownTime	LastConsistencyCheckTime	DataSize	StorageSize	IsInMemory	RowCount	DataVersion	VersionEpoch	VersionTxnType	TabletBalanced
+12027	pSYNTH5fCITY5fALPHA	2	2026-10-29 15:49:28	0	NORMAL	city	[["SYNTH_CITY_ALPHA"]]	id	1	1	HDD	9999-12-31 15:59:59	NULL	0B	0B	false	0	2	451835945302360064	TXN_NORMAL	true
+12031	pSYNTH5fCITY5fBETA	2	2026-10-29 15:49:28	0	NORMAL	city	[["SYNTH_CITY_BETA"]]	id	1	1	HDD	9999-12-31 15:59:59	NULL	0B	0B	false	0	2	451835945304457216	TXN_NORMAL	true
+
+### [t_dnd] SELECT PARTITION_NAME FROM information_schema.partitions_meta WHERE TABLE_NAME='auto_list'
+PARTITION_NAME
+$shadow_automatic_partition
+pSYNTH5fCITY5fALPHA
+pSYNTH5fCITY5fBETA
+
+### [t_dnd] ALTER TABLE biz.clients_copy MODIFY COLUMN fio INT
+
+### [t_dnd] ALTER TABLE biz.clients_copy MODIFY COLUMN card DATE
+ERROR 1064 (HY000) at line 1: A schema change operation is in progress on the table clients_copy. Please wait until the current operation completes. To check the status of the operation, see https://docs.starrocks.io/docs/sql-reference/sql-statements/table_bucket_part_index/SHOW_ALTER
+
+### [t_dnd] SHOW ALTER TABLE COLUMN FROM biz
+JobId	TableName	CreateTime	FinishTime	IndexName	IndexId	OriginIndexId	SchemaVersion	TransactionId	State	Msg	Progress	Timeout
+12044	clients_copy	2026-10-29 15:49:37	NULL	clients_copy	12045	12040	1:1146938668	2016	RUNNING		1/1	86400
+
+### [t_dnd] SHOW FULL PROCESSLIST
+ServerName	Id	User	Host	Db	Command	ConnectionStartTime	Time	State	Info	IsPending	Warehouse	CNGroup	Catalog	QueryId
+127.0.0.1_9010_1793286952868	33554468	t_dnd	127.0.0.1:48288		Query	2026-10-29 15:49:45	0	OK	SHOW FULL PROCESSLIST	false	default_warehouse		default_catalog	01a1885a-5da1-791c-aef5-8793d780336c
+
+### [t_dnd] SELECT * FROM information_schema.loads LIMIT 3
+ID	LABEL	PROFILE_ID	DB_NAME	TABLE_NAME	USER	WAREHOUSE	STATE	PROGRESS	TYPE	PRIORITY	SCAN_ROWS	SCAN_BYTES	FILTERED_ROWS	UNSELECTED_ROWS	SINK_ROWS	RUNTIME_DETAILS	CREATE_TIME	LOAD_START_TIME	LOAD_COMMIT_TIME	LOAD_FINISH_TIME	PROPERTIES	ERROR_MSG	TRACKING_SQL	REJECTED_RECORD_PATH	JOB_ID
+10302	insert_01a1883d-2d55-73ad-9f50-a399ff994c48	NULL	biz	clients	root		FINISHED	ETL:100%; LOAD:100%	INSERT	NORMAL	0	0	0	0	2	{"backends": {"01a1883d-2d55-73ad-9f50-a399ff994c48": [10001]}, "file_size": 0, "load_id": "", "task_num": 1, "txn_error_msg": "", "txn_id": 2, "unfinished_backends": {"01a1883d-2d55-73ad-9f50-a399ff994c48": []}}	2026-10-29 15:17:53	2026-10-29 15:17:53	2026-10-29 15:17:53	2026-10-29 15:17:54	{"max_filter_ratio": 0, "timeout": 14400}	NULL	NULL	NULL	10302
+10304	insert_01a1883d-30ae-7c96-b8c8-c3fd990fb5cf	NULL	_statistics_	column_statistics	root		FINISHED	ETL:100%; LOAD:100%	INSERT	NORMAL	0	0	0	0	3	{"backends": {"01a1883d-30ae-7c96-b8c8-c3fd990fb5cf": [10001]}, "file_size": 0, "load_id": "", "task_num": 1, "txn_error_msg": "", "txn_id": 3, "unfinished_backends": {"01a1883d-30ae-7c96-b8c8-c3fd990fb5cf": []}}	2026-10-29 15:17:53	2026-10-29 15:17:53	2026-10-29 15:17:54	2026-10-29 15:17:54	{"max_filter_ratio": 0, "timeout": 3600}	NULL	NULL	NULL	10304
+10305	insert_01a1883d-4938-7e5d-ac3d-ceae7271b075	NULL	_statistics_	loads_history	root		FINISHED	ETL:100%; LOAD:100%	INSERT	NORMAL	0	0	0	0	0	{"backends": {"01a1883d-4938-7e5d-ac3d-ceae7271b075": [10001]}, "file_size": 0, "load_id": "", "task_num": 1, "txn_error_msg": "", "txn_id": 4, "unfinished_backends": {"01a1883d-4938-7e5d-ac3d-ceae7271b075": []}}	2026-10-29 15:18:00	2026-10-29 15:18:00	2026-10-29 15:18:00	2026-10-29 15:18:00	{"max_filter_ratio": 0, "timeout": 3600}	NULL	NULL	NULL	10305
+
+### [t_dnd] INSTALL PLUGIN FROM '/tmp/nonexistent.zip'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the PLUGIN privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE FUNCTION biz.f_dnd(INT) RETURNS INT PROPERTIES('symbol'='x','type'='StarrocksJar','file'='file:///tmp/x.jar')
+ERROR 5064 (42000) at line 1: Getting analyzing error. Detail message: cannot compute object's checksum /tmp/x.jar (No such file or directory).
+
+### [t_dnd] CREATE EXTERNAL CATALOG c_dnd PROPERTIES('type'='jdbc')
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the CREATE EXTERNAL CATALOG privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE FILE 'dnd.pem' PROPERTIES('url'='http://127.0.0.1/x','catalog'='internal')
+ERROR 1046 (3D000) at line 1: Getting analyzing error. Detail message: No database selected.
+
+### [t_dnd] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_execute_script_on_frontend'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the OPERATE privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [root] CREATE FUNCTION biz.f_root(INT) RETURNS INT PROPERTIES('symbol'='x','type'='StarrocksJar','file'='file:///tmp/x.jar')
+ERROR 5064 (42000) at line 1: Getting analyzing error. Detail message: cannot compute object's checksum /tmp/x.jar (No such file or directory).
+

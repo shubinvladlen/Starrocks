@@ -1,0 +1,28 @@
+=== T-TLS-04: ssl_force_secure_transport=true ===
+-- plaintext from external-looking addr (via container IP), ssl-mode=DISABLED:
+ERROR 5205 (HY000): Connections using insecure transport are prohibited
+-- plaintext from 127.0.0.1 (localhost exemption), ssl-mode=DISABLED:
+'PLAINTEXT_LOCALHOST_OK'
+PLAINTEXT_LOCALHOST_OK
+-- TLS from external addr, ssl-mode=REQUIRED:
+'TLS_EXTERNAL_OK'
+TLS_EXTERNAL_OK
+
+=== T-HTTP-04: enable_http_auth=true (FE 8030) ===
+anon   /api/show_meta_info?action=SHOW_DB_SIZE  401
+anon   /metrics                                 401
+anon   /api/show_data                           401
+t_plain /api/_set_config?qe_slow_log_ms=5003     401
+root    /api/show_meta_info                      200
+
+=== T-HTTP-04: enable_http_auth=true (BE 8040) ===
+anon   /varz                                         404
+anon   /metrics                                      404
+anon   /api/update_config?report_task_interval_seconds=12 401
+anon   /greplog?pattern=x                            404
+t_plain /api/update_config (no OPERATE)               401
+root    /varz                                         200
+report_task_interval_seconds now: report_task_interval_seconds=10
+
+=== T-ADM-05: Groovy disabled ===
+ERROR 1064 (HY000) at line 1: execute script on frontend is disabled

