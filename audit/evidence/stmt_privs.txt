@@ -1,0 +1,142 @@
+318: visitInsertStatement: INSERT
+346: visitDeleteStatement: DELETE
+365: visitUpdateStatement: UPDATE
+390: visitCreateRoutineLoadStatement: INSERT
+411: visitAlterRoutineLoadStatement: INSERT
+433: visitStopRoutineLoadStatement: INSERT
+448: visitPauseRoutineLoadStatement: INSERT
+463: visitResumeRoutineLoadStatement: INSERT
+513: visitLoadStatement: USAGE INSERT
+566: visitUseDbStatement: ANY
+580: visitShowCreateDbStatement: ANY
+598: visitRecoverDbStatement: CREATE_DATABASE
+616: visitAlterDatabaseQuotaStatement: ALTER
+630: visitAlterDatabaseRenameStatement: ALTER
+644: visitDropDbStatement: DROP
+658: visitAlterDatabaseSetStatement: ALTER USAGE
+683: visitCreateDbStatement: CREATE_DATABASE USAGE
+712: visitCreateResourceStatement: CREATE_RESOURCE
+726: visitDropResourceStatement: DROP
+740: visitAlterResourceStatement: ALTER
+761: visitCreateResourceGroupStatement: CREATE_RESOURCE_GROUP
+774: visitDropResourceGroupStatement: DROP
+787: visitAlterResourceGroupStatement: ALTER
+807: visitUseCatalogStatement: ANY
+825: visitSetCatalogStatement: ANY
+843: visitCreateCatalogStatement: CREATE_EXTERNAL_CATALOG
+857: visitDropCatalogStatement: DROP
+878: visitAlterCatalogStatement: ALTER
+894: visitInstallPluginStatement: PLUGIN
+909: visitShowBackendsStatement: OPERATE NODE
+927: visitShowFrontendsStatement: OPERATE NODE
+945: visitShowBrokerStatement: OPERATE NODE
+965: visitShowComputeNodes: OPERATE NODE
+983: visitUninstallPluginStatement: PLUGIN
+996: visitShowPluginsStatement: PLUGIN
+1011: visitCreateFileStatement: ANY FILE
+1033: visitDropFileStatement: ANY FILE
+1055: visitShowSmallFilesStatement: ANY
+1142: visitKillAnalyzeStatement: BLACKLIST
+1203: visitAddBackendBlackListStatement: BLACKLIST
+1217: visitDelBackendBlackListStatement: BLACKLIST
+1231: visitShowBackendBlackListStatement: BLACKLIST
+1247: visitAddComputeNodeBlackListStatement: BLACKLIST
+1261: visitDelComputeNodeBlackListStatement: BLACKLIST
+1275: visitShowComputeNodeBlackListStatement: BLACKLIST
+1291: visitBaseCreateAlterUserStmt: GRANT
+1309: visitDropUserStatement: GRANT
+1322: visitShowUserStatement: GRANT
+1337: visitShowAuthenticationStatement: GRANT
+1358: visitExecuteAsStatement: IMPERSONATE
+1373: visitExecuteScriptStatement: OPERATE
+1386: visitCreateRoleStatement: GRANT
+1399: visitAlterRoleStatement: GRANT
+1412: visitDropRoleStatement: GRANT
+1425: visitShowRolesStatement: GRANT
+1438: visitGrantRoleStatement: GRANT
+1459: visitRevokeRoleStatement: GRANT
+1486: visitSetDefaultRoleStatement: GRANT
+1507: visitGrantRevokePrivilegeStatement: GRANT
+1525: visitShowGrantsStatement: GRANT
+1556: visitShowUserPropertyStatement: GRANT
+1572: visitSetUserPropertyStatement: GRANT
+1590: visitCreateSecurityIntegrationStatement: SECURITY
+1602: visitDropSecurityIntegrationStatement: SECURITY
+1614: visitAlterSecurityIntegrationStatement: SECURITY
+1626: visitShowSecurityIntegrationStatement: SECURITY
+1638: visitShowCreateSecurityIntegrationStatement: SECURITY
+1652: visitCreateGroupProviderStatement: SECURITY
+1664: visitDropGroupProviderStatement: SECURITY
+1676: visitAlterGroupProviderStatement: SECURITY
+1688: visitShowCreateGroupProviderStatement: SECURITY
+1700: visitShowGroupProvidersStatement: SECURITY
+1714: visitCreateViewStatement: CREATE_VIEW
+1743: visitAlterViewStatement: ALTER
+1765: visitCreateTableStatement: CREATE_TABLE USAGE
+1821: visitCreateTableLikeStatement: SELECT
+1837: visitDropTableStatement: DROP
+1870: visitRecoverTableStatement: CREATE_TABLE
+1890: visitTruncateTableStatement: DELETE
+1906: visitRefreshTableStatement: REFRESH ALTER
+1936: visitAlterTableStatement: ALTER
+1950: visitCancelAlterTableStatement: ALTER
+1988: visitDescTableStmt: ANY
+2011: visitShowCreateTableStatement: ANY
+2038: visitShowIndexStatement: ANY
+2054: visitShowColumnStatement: ANY
+2070: visitRecoverPartitionStatement: INSERT ALTER
+2100: visitShowPartitionsStatement: ANY
+2162: visitAdminSetConfigStatement: OPERATE
+2175: visitAdminSetReplicaStatusStatement: OPERATE
+2188: visitAdminShowConfigStatement: OPERATE
+2201: visitAdminShowAutomatedSnapshotStatement: OPERATE
+2215: visitAdminShowReplicaDistributionStatement: OPERATE
+2229: visitAdminShowReplicaStatusStatement: OPERATE
+2242: visitAdminShowTabletStatusStatement: OPERATE
+2255: visitAdminRepairTableStatement: OPERATE
+2268: visitAdminCancelRepairTableStatement: OPERATE
+2281: visitAdminSkipCommittedTransactionStatement: OPERATE
+2295: visitAdminCheckTabletsStatement: OPERATE
+2314: visitAlterSystemStatement: NODE
+2327: visitCancelAlterSystemStatement: NODE
+2340: visitShowProcStmt: OPERATE
+2376: visitSetStatement: GRANT OPERATE
+2416: visitRefreshConnectionsStatement: OPERATE
+2429: visitCleanTemporaryTableStatement: OPERATE
+2443: visitExportStatement: EXPORT
+2462: visitCancelExportStatement: EXPORT
+2490: visitCreateRepositoryStatement: REPOSITORY
+2504: visitDropRepositoryStatement: REPOSITORY
+2517: visitShowSnapshotStatement: REPOSITORY
+2530: visitBackupStatement: REPOSITORY EXPORT USAGE CREATE_DATABASE
+2621: visitShowBackupStatement: REPOSITORY
+2638: visitCancelBackupStatement: REPOSITORY EXPORT
+2677: visitRestoreStatement: REPOSITORY CREATE_EXTERNAL_CATALOG CREATE_DATABASE CREATE_TABLE INSERT
+2758: visitShowRestoreStatement: REPOSITORY
+2772: visitCreateMaterializedViewStatement: CREATE_MATERIALIZED_VIEW
+2797: visitAlterMaterializedViewStatement: ALTER
+2812: visitRefreshMaterializedViewStatement: REFRESH
+2829: visitCancelRefreshMaterializedViewStatement: REFRESH
+2862: visitCreateFunctionStatement: CREATE_GLOBAL_FUNCTION CREATE_FUNCTION
+2900: visitDropFunctionStatement: DROP
+2948: visitCreateStorageVolumeStatement: CREATE_STORAGE_VOLUME
+2962: visitAlterStorageVolumeStatement: ALTER
+2976: visitDropStorageVolumeStatement: DROP
+2990: visitDescStorageVolumeStatement: ANY
+3004: visitSetDefaultStorageVolumeStatement: ALTER
+3019: visitCreatePipeStatement: CREATE_PIPE
+3035: visitDropPipeStatement: DROP
+3050: visitAlterPipeStatement: ALTER
+3065: visitDescPipeStatement: ANY
+3087: visitCancelCompactionStatement: OPERATE
+3101: visitCreateWarehouseStatement: CREATE_WAREHOUSE
+3114: visitSuspendWarehouseStatement: ALTER
+3126: visitResumeWarehouseStatement: ALTER
+3137: visitDropWarehouseStatement: DROP
+3148: visitSetWarehouseStatement: USAGE
+3165: visitShowClusterStatement: ANY
+3179: visitCreateCNGroupStatement: ALTER
+3191: visitDropCNGroupStatement: ALTER
+3203: visitEnableDisableCNGroupStatement: ALTER
+3215: visitAlterCNGroupStatement: ALTER USAGE INSERT
+3295: visitAlterWarehouseStatement: ALTER

@@ -1,0 +1,72 @@
+### [t_uadm] GRANT SELECT ON biz.clients TO USER t_uadm
+
+### [t_uadm] SELECT * FROM biz.clients
+id	fio	card
+1	SYNTH_A	0000-SYNTH-0001
+2	SYNTH_B	0000-SYNTH-0002
+
+### [t_uadm] REVOKE SELECT ON biz.clients FROM USER t_uadm
+
+### [t_uadm] GRANT db_admin TO USER t_uadm
+
+### [t_uadm] SELECT count(*) FROM biz.clients
+count(*)
+2
+
+### [t_uadm] EXECUTE AS t_app WITH NO REVERT; SELECT count(*) FROM biz.clients
+count(*)
+2
+
+### [t_sec] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_execute_script_on_frontend'
+Key	AliasNames	Value	Type	IsMutable	Comment
+enable_execute_script_on_frontend	[]	true	boolean	false	
+
+### [t_sec] ADMIN SHOW FRONTEND CONFIG LIKE 'authentication_chain'
+Key	AliasNames	Value	Type	IsMutable	Comment
+authentication_chain	[]	[native]	String[]	true	
+
+### [t_sec] SHOW SECURITY INTEGRATIONS
+
+### [t_sec] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [security_admin]. Inactivated role(s): NONE.
+
+### [t_dba] ADMIN SHOW FRONTEND CONFIG LIKE 'audit_log_%'
+Key	AliasNames	Value	Type	IsMutable	Comment
+audit_log_delete_age	[]	30d	String	false	
+audit_log_dir	[]	/data/deploy/starrocks/fe/log	String	false	
+audit_log_enable_compress	[]	false	boolean	false	
+audit_log_error_message_max_length	[]	1024	int	true	Max length of the error message recorded in the audit log, truncate messages longer than this specified limit. Set to 0 to stop recording error messages. Default: 1024
+audit_log_json_format	[]	false	boolean	true	
+audit_log_modules	[]	[slow_query, query]	String[]	false	
+audit_log_roll_interval	[]	DAY	String	false	
+audit_log_roll_num	[]	90	int	false	
+
+### [t_dba] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_audit_sql'
+Key	AliasNames	Value	Type	IsMutable	Comment
+enable_audit_sql	[]	true	boolean	false	
+
+### [t_cadm] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): [cluster_admin]. Inactivated role(s): NONE.
+
+### [t_cadm] SHOW BACKENDS\G
+*************************** 1. row ***************************
+            BackendId: 10001
+                   IP: 127.0.0.1
+
+
+
+
+
+
+                Alive: true
+ SystemDecommissioned: false
+ClusterDecommissioned: false
+            TabletNum: 119
+
+
+
+              UsedPct: 90.57 %
+       MaxDiskUsedPct: 90.57 %
+               ErrMsg: 
+              Version: 4.1.7-b81ff9c
+

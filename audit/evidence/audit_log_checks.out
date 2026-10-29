@@ -1,0 +1,26 @@
+# Проверка fe.audit.log на стенде (конфигурация по умолчанию), 2026-10-29
+
+$ ls -la fe.audit.log fe.connection*
+ls: cannot access 'fe.connection*': No such file or directory
+-rw-r--r-- 1 root root 98726 Oct 29 15:18 fe.audit.log       # в образе allin1 FE работает от root, журнал 0644
+
+connection records ([connection]): 0          # audit_log_modules = [slow_query, query]
+records of failed logins of t_app (10 попыток с неверным паролем): 0
+
+# DCL/DDL/конфигурация - регистрируются как [query] со Stmt (пароли маскируются '***'):
+|User=t_uadm|AuthorizedUser='t_uadm'@'%'|State=OK|Stmt=GRANT SELECT ON biz.clients TO USER t_uadm
+|User=t_uadm|AuthorizedUser='t_uadm'@'%'|State=OK|Stmt=GRANT db_admin TO USER t_uadm
+|User=t_uadm|AuthorizedUser='t_uadm'@'%'|State=OK|Stmt=EXECUTE AS t_app WITH NO REVERT
+|User=root|AuthorizedUser='root'@'%'|State=OK|Stmt=CREATE USER t_weak IDENTIFIED BY '***'
+|User=root|AuthorizedUser='root'@'%'|State=OK|Stmt=ADMIN SET FRONTEND CONFIG ('qe_slow_log_ms' = '5001')
+|User=root|AuthorizedUser='root'@'%'|State=OK|Stmt=DROP USER t_nopwd
+|User=root|AuthorizedUser='root'@'%'|State=OK|Stmt=ALTER TABLE biz.clients SET ('replication_num'='1')
+
+# Атрибуция после EXECUTE AS сохраняется:
+User=t_uadm|AuthorizedUser='t_app'@'%'   (Stmt=SELECT count(*) FROM biz.clients)
+
+# Поля записи [query]:
+Timestamp Client User AuthorizedUser ResourceGroup Catalog Db State ErrorCode Time ScanBytes ScanRows ReturnRows
+StmtId QueryId IsQuery feIp Stmt Digest Warehouse CNGroup IsForwardToLeader QueryFEAllocatedMemory SessionId
+CustomQueryId CustomSessionName TransmittedBytes QuerySource Command
+# Поля «приложение пользователя» (program_name из connect attrs) - НЕТ.

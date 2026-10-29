@@ -1,0 +1,48 @@
+### root login without password:
+'ROOT_EMPTY_PASSWORD_LOGIN_OK'
+ROOT_EMPTY_PASSWORD_LOGIN_OK
+### [root] CREATE USER t_weak IDENTIFIED BY '1'
+
+### [root] CREATE USER t_nopwd
+
+### [root] ALTER USER t_weak PASSWORD EXPIRE INTERVAL 90 DAY
+ERROR 1064 (HY000) at line 1: Getting syntax error at line 1, column 18. Detail message: No viable statement for input 'ALTER USER t_weak PASSWORD'.
+
+### [root] ALTER USER t_weak ACCOUNT LOCK
+ERROR 1064 (HY000) at line 1: Getting syntax error at line 1, column 18. Detail message: No viable statement for input 'ALTER USER t_weak ACCOUNT'.
+
+### [root] CREATE USER t_x IDENTIFIED BY 'abc' PASSWORD_LOCK_TIME 1
+ERROR 1064 (HY000) at line 1: Getting syntax error at line 1, column 36. Detail message: Unexpected input 'PASSWORD_LOCK_TIME', the most similar input is {<EOF>, ';'}.
+
+### after 10 failures, correct password:
+'NOT_LOCKED'
+NOT_LOCKED
+### [root] SHOW VARIABLES LIKE '%ssl%'
+
+### [root] ADMIN SHOW FRONTEND CONFIG LIKE 'ssl_%'
+Key	AliasNames	Value	Type	IsMutable	Comment
+ssl_cipher_blacklist	[]		String	false	
+ssl_cipher_whitelist	[]		String	false	
+ssl_force_secure_transport	[]	false	boolean	false	
+ssl_key_password	[]		String	false	
+ssl_keystore_location	[]		String	false	
+ssl_keystore_password	[]		String	false	
+ssl_truststore_location	[]		String	false	
+ssl_truststore_password	[]		String	false	
+
+### [root] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_https'
+Key	AliasNames	Value	Type	IsMutable	Comment
+enable_https	[]	false	boolean	false	enable https flag. false by default. If true then http and https are both enabled on different ports. Otherwise, only http is enabled.
+
+### [root] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_http_auth'
+Key	AliasNames	Value	Type	IsMutable	Comment
+enable_http_auth	[]	false	boolean	false	Whether to require Basic Auth for external HTTP endpoints. Internal endpoints (FE meta sync, health/metrics probes, OAuth2 callback) are always exempt. Default false for backward compatibility. Immutable; requires an FE restart to change.
+
+### mysql --ssl-mode=REQUIRED:
+ERROR 2026 (HY000): SSL connection error: SSL is required but the server doesn't support it
+### [root] ADMIN SET FRONTEND CONFIG ('qe_slow_log_ms' = '5001')
+
+### [root] DROP USER t_nopwd
+
+### [root] ALTER TABLE biz.clients SET ('replication_num'='1')
+

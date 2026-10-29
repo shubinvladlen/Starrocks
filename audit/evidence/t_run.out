@@ -1,0 +1,94 @@
+### [root] SELECT current_version()
+current_version()
+4.1.7-b81ff9c
+
+### [root] SHOW GRANTS FOR ROLE db_admin
+UserIdentity	Catalog	Grants
+db_admin	NULL	GRANT DELETE, DROP, INSERT, SELECT, ALTER, EXPORT, UPDATE, REFRESH ON ALL TABLES IN ALL DATABASES TO ROLE 'db_admin'
+db_admin	NULL	GRANT CREATE TABLE, DROP, ALTER, CREATE VIEW, CREATE FUNCTION, CREATE MATERIALIZED VIEW, CREATE PIPE ON ALL DATABASES TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT CREATE RESOURCE, PLUGIN, FILE, BLACKLIST, OPERATE, CREATE EXTERNAL CATALOG, REPOSITORY, CREATE RESOURCE GROUP, CREATE GLOBAL FUNCTION, CREATE STORAGE VOLUME, SECURITY ON SYSTEM TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT USAGE, ALTER, DROP ON ALL RESOURCES TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT SELECT, ALTER, DROP ON ALL VIEWS IN ALL DATABASES TO ROLE 'db_admin'
+db_admin	NULL	GRANT USAGE, CREATE DATABASE, DROP, ALTER ON ALL CATALOGS TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT ALTER, REFRESH, DROP, SELECT ON ALL MATERIALIZED VIEWS IN ALL DATABASES TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT USAGE, DROP ON ALL FUNCTIONS IN ALL DATABASES TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT ALTER, DROP ON ALL RESOURCE GROUPS TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT USAGE, DROP ON ALL GLOBAL FUNCTIONS TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT DROP, ALTER, USAGE ON ALL STORAGE VOLUMES TO ROLE 'db_admin'
+db_admin	default_catalog	GRANT ALTER, DROP, USAGE ON ALL DATABASES TO ROLE 'db_admin'
+
+### [root] SHOW GRANTS FOR ROLE user_admin
+UserIdentity	Catalog	Grants
+user_admin	default_catalog	GRANT GRANT ON SYSTEM TO ROLE 'user_admin'
+user_admin	default_catalog	GRANT IMPERSONATE ON ALL USERS TO ROLE 'user_admin'
+
+### [root] SHOW GRANTS FOR ROLE security_admin
+UserIdentity	Catalog	Grants
+security_admin	default_catalog	GRANT OPERATE, SECURITY ON SYSTEM TO ROLE 'security_admin'
+
+### [root] SHOW GRANTS FOR ROLE cluster_admin
+UserIdentity	Catalog	Grants
+cluster_admin	default_catalog	GRANT USAGE, ALTER, DROP ON ALL WAREHOUSES TO ROLE 'cluster_admin'
+cluster_admin	default_catalog	GRANT NODE, CREATE WAREHOUSE ON SYSTEM TO ROLE 'cluster_admin'
+
+### [root] SHOW GRANTS FOR ROLE public
+UserIdentity	Catalog	Grants
+public	default_catalog	GRANT SELECT ON ALL TABLES IN DATABASE information_schema TO ROLE 'public'
+
+### [t_dba] SELECT * FROM biz.clients
+id	fio	card
+1	SYNTH_A	0000-SYNTH-0001
+2	SYNTH_B	0000-SYNTH-0002
+
+### [t_cadm] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [cluster_admin].
+
+### [t_sec] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [security_admin].
+
+### [t_uadm] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_uadm] GRANT SELECT ON biz.clients TO USER t_uadm
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the GRANT privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_uadm] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_uadm] REVOKE SELECT ON biz.clients FROM USER t_uadm
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the GRANT privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_uadm] GRANT db_admin TO USER t_uadm
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the GRANT privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_uadm] GRANT root TO USER t_uadm
+ERROR 1064 (HY000) at line 1: Getting analyzing error. Detail message: Can not grant root or cluster_admin role except root user.
+
+### [root] REVOKE db_admin FROM USER t_uadm
+
+### [t_uadm] EXECUTE AS t_app WITH NO REVERT; SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the IMPERSONATE privilege(s) on USER t_app for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [user_admin].
+
+### [t_sec] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_execute_script_on_frontend'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the OPERATE privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [security_admin].
+
+### [t_plain] ADMIN SHOW FRONTEND CONFIG LIKE 'enable_execute_script_on_frontend'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the OPERATE privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): NONE.
+
+### [t_sec] SHOW SECURITY INTEGRATIONS
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SECURITY privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [security_admin].
+
+### [t_dba] SHOW SECURITY INTEGRATIONS
+
+### [t_sec] ADMIN SHOW FRONTEND CONFIG LIKE 'authentication_chain'
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the OPERATE privilege(s) on SYSTEM for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): [security_admin].
+
+### [t_plain] SELECT * FROM biz.clients
+ERROR 5203 (42000) at line 1: Access denied; you need (at least one of) the SELECT privilege(s) on TABLE clients for this operation. Please ask the admin to grant permission(s) or try activating existing roles using <set [default] role>. Current role(s): NONE. Inactivated role(s): NONE.
+
+### [t_plain] SELECT TABLE_SCHEMA,TABLE_NAME FROM information_schema.tables WHERE TABLE_SCHEMA='biz'
+
+### [t_plain] SHOW DATABASES
+Database
+information_schema
+

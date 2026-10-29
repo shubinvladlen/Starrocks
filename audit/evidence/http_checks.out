@@ -1,0 +1,38 @@
+# Анонимные HTTP-запросы (без заголовка Authorization) к стенду allin1-ubuntu:4.1.7, конфигурация по умолчанию
+# Дата: 2026-10-29. Зафиксированы только код ответа и размер; содержимое не выгружалось, кроме служебных ответов ниже.
+
+=== FE :8030
+/api/show_data                                200 1B
+/api/show_meta_info?action=SHOW_DB_SIZE       200 57B   -> {"biz":0,"information_schema":0,"_statistics_":0,"sys":0}
+/api/show_runtime_info                        200 90B
+/api/query_detail?event_time=0                401 96B
+/api/profile                                  401 96B
+/api/connection                               400 19B
+/api/memory_usage                             403 32B
+/metrics                                      200 66205B
+/api/v2/query_detail                          401 96B
+/api/_set_config?qe_slow_log_ms=5002          401 96B
+/api/health                                   200 60B
+/api/bootstrap                                200 156B  (без token: только статус, без служебных данных)
+
+=== BE :8040
+/api/health                                   200 37B
+/metrics                                      200 263083B
+/varz                                         200 31726B  (полный дамп конфигурации BE; секреты не проверялись поимённо)
+/api/compaction/show?tablet_id=1              200 55B
+/greplog?pattern=Download                     200       -> "Lines: 0" (эндпоинт поиска по журналу BE доступен анонимно)
+/api/_tablet/_download?file=/tmp              200 23B   -> "token is not specified."  (проверка токена работает)
+
+/varz (выборка):
+enable_http_auth=false
+enable_https=false
+enable_token_check=true
+ssl_certificate_path=
+ssl_private_key_path=
+
+=== Анонимное изменение конфигурации BE (безопасный параметр, значение возвращено)
+before:   report_task_interval_seconds=10
+POST /api/update_config?report_task_interval_seconds=11  -> {"status":"OK","msg":""}
+after:    report_task_interval_seconds=11
+reverted: report_task_interval_seconds=10
+Записей в fe.audit.log об изменении: 0; записей в be.INFO с именем параметра: 0
